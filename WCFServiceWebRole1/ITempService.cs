@@ -29,7 +29,8 @@ namespace WCFServiceWebRole1
         string location;
         string data;
         DateTime timestamp;
-
+        Status status; 
+        
         [DataMember]
         public int Id
         {
@@ -60,6 +61,23 @@ namespace WCFServiceWebRole1
             get { return timestamp; }
             set { timestamp = value; }
         }
+
+        [DataMember]        
+        public Status Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
     }
-   
+
+
+    public enum Status
+    {
+        Kold = 1,
+        Mellemkold = 2, 
+        God = 3, 
+        Mellemvarm = 4, 
+        Varm = 5
+    }
+
 }

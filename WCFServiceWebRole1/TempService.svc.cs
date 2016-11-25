@@ -8,25 +8,35 @@ using Newtonsoft.Json;
 
 namespace WCFServiceWebRole1
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "TempService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select TempService.svc or TempService.svc.cs at the Solution Explorer and start debugging.
+    
+    /// <summary>
+    /// Status nummer: 
+    /// 0: Ikke filtret 
+    /// 1: Kold             Under 15
+    /// 2: Mellem-Kold      15-18
+    /// 3: God              18-22
+    /// 4: Mellem-Varmt     22-25
+    /// 5: Varmt            Over 25
+    /// </summary>
+
     public class TempService : ITempService
     {
         private static List<Temperatur> _tempList = new List<Temperatur>()
         {
-            new Temperatur()
+           #region TestingData
+		 new Temperatur()
             {
-                Id = 1, 
-                Location = "Lokale 1", 
-                Data = "20C",
-                Timestamp = DateTime.Now
+                Id = 1,
+                Location = "Lokale 1",
+                Data = "11 C",
+                Timestamp = DateTime.Now,
             },
 
             new Temperatur()
             {
                 Id = 2,
                 Location = "Lokale 1",
-                Data = "18C",
+                Data = "17 C",
                 Timestamp = DateTime.Now
             },
 
@@ -34,14 +44,40 @@ namespace WCFServiceWebRole1
             {
                 Id = 3,
                 Location = "Lokale 1",
-                Data = "24C",
+                Data = "24 C",
                 Timestamp = DateTime.Now
             },
 
+            new Temperatur()
+            {
+                Id = 4,
+                Location = "Lokale 1",
+                Data = "22 C",
+                Timestamp = DateTime.Now
+            },
+
+            new Temperatur()
+            {
+                Id = 5,
+                Location = "Lokale 1",
+                Data = "30 C",
+                Timestamp = DateTime.Now
+            },
+
+            new Temperatur()
+            {
+                Id = 6,
+                Location = "Lokale 1",
+                Data = "20 C",
+                Timestamp = DateTime.Now
+            },
+
+	#endregion
         };
 
         public List<Temperatur> GetAll()
         {
+            FilterTemperaturs(_tempList); 
             return _tempList; 
         }
 
@@ -49,5 +85,25 @@ namespace WCFServiceWebRole1
         {
             _tempList.Add(t);
         }
+
+        public List<Temperatur> FilterTemperaturs(List<Temperatur> list)
+        {
+            foreach (var temperatur in list)
+            {
+                if (int.Parse(temperatur.Data.Split()[0]) < 15)
+                    temperatur.Status = Status.Kold; 
+                else if (int.Parse(temperatur.Data.Split()[0]) >= 15 && int.Parse(temperatur.Data.Split()[0]) < 18)
+                    temperatur.Status = Status.Mellemkold;
+                else if(int.Parse(temperatur.Data.Split()[0]) >= 18 && int.Parse(temperatur.Data.Split()[0]) <= 22)
+                    temperatur.Status = Status.God;
+                else if(int.Parse(temperatur.Data.Split()[0]) > 22 && int.Parse(temperatur.Data.Split()[0]) < 25)
+                    temperatur.Status = Status.Mellemvarm;
+                else 
+                    temperatur.Status = Status.Varm;
+            }
+
+            return list;
+        }
+
     }
 }
