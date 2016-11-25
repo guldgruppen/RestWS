@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "RestWS", "RestWS\RestWS.ccproj", "{DDB560DB-0C50-44E7-BA28-441B0F521DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFServiceWebRole1", "WCFServiceWebRole1\WCFServiceWebRole1.csproj", "{AFC09697-DF45-4ECE-8086-8AC3F66D571D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDB560DB-0C50-44E7-BA28-441B0F521DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB560DB-0C50-44E7-BA28-441B0F521DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB560DB-0C50-44E7-BA28-441B0F521DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB560DB-0C50-44E7-BA28-441B0F521DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC09697-DF45-4ECE-8086-8AC3F66D571D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC09697-DF45-4ECE-8086-8AC3F66D571D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC09697-DF45-4ECE-8086-8AC3F66D571D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC09697-DF45-4ECE-8086-8AC3F66D571D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
