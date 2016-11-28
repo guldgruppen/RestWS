@@ -21,108 +21,53 @@ namespace WCFServiceWebRole1
 
     public class TempService : ITempService
     {
+        TempContext db = new TempContext();
         private UdpServerHandler _udpHandler;
         public TempService()
         {
             _udpHandler = UdpServerHandler.Instance;
         }
-        private static List<Temperatur> _tempList = new List<Temperatur>()
-        {
-           #region TestingData
-		 new Temperatur()
-            {
-                Id = 1,
-                Location = "Lokale1",
-                Data = "11 C",
-                Timestamp = DateTime.Now - TimeSpan.FromHours(2),
-            },
-
-            new Temperatur()
-            {
-                Id = 2,
-                Location = "Lokale1",
-                Data = "17 C",
-                Timestamp = DateTime.Now - TimeSpan.FromHours(2)
-            },
-
-            new Temperatur()
-            {
-                Id = 3,
-                Location = "Lokale1",
-                Data = "24 C",
-                Timestamp = DateTime.Now
-            },
-
-            new Temperatur()
-            {
-                Id = 4,
-                Location = "Lokale2",
-                Data = "22 C",
-                Timestamp = DateTime.Now - TimeSpan.FromHours(2)
-            },
-
-            new Temperatur()
-            {
-                Id = 5,
-                Location = "Lokale2",
-                Data = "30 C",
-                Timestamp = DateTime.Now
-            },
-
-            new Temperatur()
-            {
-                Id = 6,
-                Location = "Lokale3",
-                Data = "20 C",
-                Timestamp = DateTime.Now
-            },
-
-	#endregion
-        };
+       
 
         public List<Temperatur> GetAll()
         {
-            FilterTemperaturs(_tempList); 
-            return _tempList; 
+            var list = db.Temperatur.ToList();
+            return list;
         }
-        public string GetUdpServerData()
-        {
-            
+        public string GetUdpServerData() 
+        {           
             return _udpHandler.GetDataFromUdp();
         }
 
-        public Temperatur GetTemp(string location)
+        public Temperatur GetTemp(string locationId)
         {
-            FilterTemperaturs(_tempList);
-
-            var temp = _tempList.OrderByDescending(t => t.Timestamp).Where((temperatur => temperatur.Location == location)).FirstOrDefault(); 
+            var temp = db.Temperatur.ToList()
+                .OrderByDescending((temperatur => temperatur.Timestamp))
+                .Where((temperatur => temperatur.Location == int.Parse(locationId)))
+                .SingleOrDefault();
 
             return temp; 
-
         }
 
         public void Post(Temperatur t)
         {
-            _tempList.Add(t);
+            SetStatus(t); 
+            db.Temperatur.Add(t);
+            db.SaveChanges();
         }
 
-        public List<Temperatur> FilterTemperaturs(List<Temperatur> list)
+        private void SetStatus(Temperatur t)
         {
-            foreach (var temperatur in list)
-            {
-                if (double.Parse(temperatur.Data.Split()[0]) < 15)
-                    temperatur.Status = Status.LightBlue; 
-                else if (double.Parse(temperatur.Data.Split()[0]) >= 15 && int.Parse(temperatur.Data.Split()[0]) < 18)
-                    temperatur.Status = Status.Blue;
-                else if(double.Parse(temperatur.Data.Split()[0]) >= 18 && int.Parse(temperatur.Data.Split()[0]) <= 22)
-                    temperatur.Status = Status.Green;
-                else if(double.Parse(temperatur.Data.Split()[0]) > 22 && int.Parse(temperatur.Data.Split()[0]) < 25)
-                    temperatur.Status = Status.Yellow;
-                else 
-                    temperatur.Status = Status.Green;
-            }
-
-            return list;
+            if (double.Parse(t.Data) < 15)
+                t.Status = 1; 
+            else if (double.Parse(t.Data) >= 15 && double.Parse(t.Data) < 18)
+                t.Status = 2; 
+            else if (double.Parse(t.Data) >= 18 && double.Parse(t.Data) <= 22)
+                t.Status = 3; 
+            else if (double.Parse(t.Data) > 22 && double.Parse(t.Data) < 25)
+                t.Status = 4;
+            else
+                t.Status = 5;
         }
 
     }
