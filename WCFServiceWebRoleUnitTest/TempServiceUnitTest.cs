@@ -56,6 +56,9 @@ namespace WCFServiceWebRoleUnitTest
             // Temperaturen er 11 grader, og derfor er status LightBlue (Kold) 
             Assert.AreEqual(Status.LightBlue, list[0].Status);         
 
+            // Temperaturen er 17 grader, og derfor er status blue (mellem kold) 
+            Assert.AreEqual(Status.Blue, list[1].Status);
+
         }
 
     }
