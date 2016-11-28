@@ -18,7 +18,10 @@ namespace WCFServiceWebRole1
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Temperatur/Get/{location}")]
-        Temperatur GetTemp(string location); 
+        Temperatur GetTemp(string location);
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Temperatur/GetUdpServerData/")]
+        string GetUdpServerData();
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,

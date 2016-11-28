@@ -21,6 +21,11 @@ namespace WCFServiceWebRole1
 
     public class TempService : ITempService
     {
+        private UdpServerHandler _udpHandler;
+        public TempService()
+        {
+            _udpHandler = UdpServerHandler.Instance;
+        }
         private static List<Temperatur> _tempList = new List<Temperatur>()
         {
            #region TestingData
@@ -79,6 +84,11 @@ namespace WCFServiceWebRole1
         {
             FilterTemperaturs(_tempList); 
             return _tempList; 
+        }
+        public string GetUdpServerData()
+        {
+            
+            return _udpHandler.GetDataFromUdp();
         }
 
         public Temperatur GetTemp(string location)

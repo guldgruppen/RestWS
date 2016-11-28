@@ -103,6 +103,7 @@
     <Compile Include="TempService.svc.cs">
       <DependentUpon>TempService.svc</DependentUpon>
     </Compile>
+    <Compile Include="UdpServerHandler.cs" />
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
