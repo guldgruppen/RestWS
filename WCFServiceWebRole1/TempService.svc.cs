@@ -27,23 +27,23 @@ namespace WCFServiceWebRole1
 		 new Temperatur()
             {
                 Id = 1,
-                Location = "Lokale 1",
+                Location = "Lokale1",
                 Data = "11 C",
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.Now - TimeSpan.FromHours(2),
             },
 
             new Temperatur()
             {
                 Id = 2,
-                Location = "Lokale 1",
+                Location = "Lokale1",
                 Data = "17 C",
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.Now - TimeSpan.FromHours(2)
             },
 
             new Temperatur()
             {
                 Id = 3,
-                Location = "Lokale 1",
+                Location = "Lokale1",
                 Data = "24 C",
                 Timestamp = DateTime.Now
             },
@@ -51,15 +51,15 @@ namespace WCFServiceWebRole1
             new Temperatur()
             {
                 Id = 4,
-                Location = "Lokale 1",
+                Location = "Lokale2",
                 Data = "22 C",
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.Now - TimeSpan.FromHours(2)
             },
 
             new Temperatur()
             {
                 Id = 5,
-                Location = "Lokale 1",
+                Location = "Lokale2",
                 Data = "30 C",
                 Timestamp = DateTime.Now
             },
@@ -67,7 +67,7 @@ namespace WCFServiceWebRole1
             new Temperatur()
             {
                 Id = 6,
-                Location = "Lokale 1",
+                Location = "Lokale3",
                 Data = "20 C",
                 Timestamp = DateTime.Now
             },
@@ -79,6 +79,16 @@ namespace WCFServiceWebRole1
         {
             FilterTemperaturs(_tempList); 
             return _tempList; 
+        }
+
+        public Temperatur GetTemp(string location)
+        {
+            FilterTemperaturs(_tempList);
+
+            var temp = _tempList.OrderByDescending(t => t.Timestamp).Where((temperatur => temperatur.Location == location)).FirstOrDefault(); 
+
+            return temp; 
+
         }
 
         public void Post(Temperatur t)
