@@ -90,16 +90,16 @@ namespace WCFServiceWebRole1
         {
             foreach (var temperatur in list)
             {
-                if (int.Parse(temperatur.Data.Split()[0]) < 15)
-                    temperatur.Status = Status.Kold; 
-                else if (int.Parse(temperatur.Data.Split()[0]) >= 15 && int.Parse(temperatur.Data.Split()[0]) < 18)
-                    temperatur.Status = Status.Mellemkold;
-                else if(int.Parse(temperatur.Data.Split()[0]) >= 18 && int.Parse(temperatur.Data.Split()[0]) <= 22)
-                    temperatur.Status = Status.God;
-                else if(int.Parse(temperatur.Data.Split()[0]) > 22 && int.Parse(temperatur.Data.Split()[0]) < 25)
-                    temperatur.Status = Status.Mellemvarm;
+                if (double.Parse(temperatur.Data.Split()[0]) < 15)
+                    temperatur.Status = Status.LightBlue; 
+                else if (double.Parse(temperatur.Data.Split()[0]) >= 15 && int.Parse(temperatur.Data.Split()[0]) < 18)
+                    temperatur.Status = Status.Blue;
+                else if(double.Parse(temperatur.Data.Split()[0]) >= 18 && int.Parse(temperatur.Data.Split()[0]) <= 22)
+                    temperatur.Status = Status.Green;
+                else if(double.Parse(temperatur.Data.Split()[0]) > 22 && int.Parse(temperatur.Data.Split()[0]) < 25)
+                    temperatur.Status = Status.Yellow;
                 else 
-                    temperatur.Status = Status.Varm;
+                    temperatur.Status = Status.Green;
             }
 
             return list;

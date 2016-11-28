@@ -73,11 +73,11 @@ namespace WCFServiceWebRole1
 
     public enum Status
     {
-        Kold = 1,
-        Mellemkold = 2, 
-        God = 3, 
-        Mellemvarm = 4, 
-        Varm = 5
+        LightBlue = 1,
+        Blue = 2, 
+        Green = 3, 
+        Yellow = 4, 
+        Red = 5
     }
 
 }
