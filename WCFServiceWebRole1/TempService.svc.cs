@@ -34,6 +34,10 @@ namespace WCFServiceWebRole1
             var list = db.Temperatur.ToList();
             return list;
         }
+        public string Get()
+        {
+            return JsonConvert.SerializeObject(db.Temperatur.ToList());
+        }
         public string GetUdpServerData() 
         {           
             return _udpHandler.GetDataFromUdp();
@@ -49,10 +53,12 @@ namespace WCFServiceWebRole1
             return temp; 
         }
 
-        public void Post(Temperatur t)
+        public void Post(string jsonData)
         {
-            SetStatus(t); 
-            db.Temperatur.Add(t);
+            Temperatur temp = JsonConvert.DeserializeObject<Temperatur>(jsonData);
+            temp.Data = "16";
+            SetStatus(temp); 
+            db.Temperatur.Add(temp);
             db.SaveChanges();
         }
 
