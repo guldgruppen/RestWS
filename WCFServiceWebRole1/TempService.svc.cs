@@ -45,17 +45,13 @@ namespace WCFServiceWebRole1
 
         public Temperatur GetTemp(string locationId)
         {
-            //var temp = db.Temperatur.ToList()
-            //    .OrderByDescending((temperatur => temperatur.Timestamp))
-            //    .Where((temperatur => temperatur.Location == int.Parse(locationId)))
-            //    .SingleOrDefault();
             return db.Temperatur.ToList().FirstOrDefault(x => x.Location.Equals(int.Parse(locationId))); 
         }
+
 
         public void Post(string jsonData)
         {
             Temperatur temp = JsonConvert.DeserializeObject<Temperatur>(jsonData);
-            temp.Data = "16";
             SetStatus(temp); 
             db.Temperatur.Add(temp);
             db.SaveChanges();
