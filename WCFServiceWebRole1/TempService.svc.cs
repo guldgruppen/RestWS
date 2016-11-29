@@ -34,9 +34,9 @@ namespace WCFServiceWebRole1
             var list = db.Temperatur.ToList();
             return list;
         }
-        public string Get()
+        public List<Temperatur> Get()
         {
-            return JsonConvert.SerializeObject(db.Temperatur.ToList());
+            return db.Temperatur.ToList();
         }
         public string GetUdpServerData() 
         {           
@@ -45,12 +45,11 @@ namespace WCFServiceWebRole1
 
         public Temperatur GetTemp(string locationId)
         {
-            var temp = db.Temperatur.ToList()
-                .OrderByDescending((temperatur => temperatur.Timestamp))
-                .Where((temperatur => temperatur.Location == int.Parse(locationId)))
-                .SingleOrDefault();
-
-            return temp; 
+            //var temp = db.Temperatur.ToList()
+            //    .OrderByDescending((temperatur => temperatur.Timestamp))
+            //    .Where((temperatur => temperatur.Location == int.Parse(locationId)))
+            //    .SingleOrDefault();
+            return db.Temperatur.ToList().FirstOrDefault(x => x.Location.Equals(int.Parse(locationId))); 
         }
 
         public void Post(string jsonData)
