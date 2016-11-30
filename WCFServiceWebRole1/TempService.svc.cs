@@ -87,8 +87,8 @@ namespace WCFServiceWebRole1
             var dayCalc = DateTime.Now.AddDays(days).DayOfWeek.ToString();
             var tempCalc = temp.Select(x => double.Parse(x.Data)).Sum() / temp.Count();
             return new DaysAndTemp {
-              Day = GetDanishDayName(dayCalc),
-              Temp = tempCalc,
+              Day = GetDanishDayName(dayCalc) ?? "Hellidag",
+              Temp = tempCalc == 0 ? -1 : tempCalc,
             };
         }
         private string GetDanishDayName(string day)
