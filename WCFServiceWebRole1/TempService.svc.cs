@@ -48,6 +48,16 @@ namespace WCFServiceWebRole1
             return db.Temperatur.ToList().FirstOrDefault(x => x.Location.Equals(int.Parse(locationId))); 
         }
 
+        public List<DaysAndTemp> GetNextFiveDays()
+        {
+            List<DaysAndTemp> temps = new List<DaysAndTemp>();
+            for (int i = 0; i < 5; i++)
+            {
+                temps.Add(GetDays(i));
+            }
+            return temps;
+        }
+
 
         public void Post(string jsonData)
         {
@@ -71,5 +81,44 @@ namespace WCFServiceWebRole1
                 t.Status = 5;
         }
 
+        private DaysAndTemp GetDays(int days)
+        {
+            var temp = db.Temperatur.ToList().Where(x => (x.Timestamp.DayOfWeek).Equals(DateTime.Now.AddDays(days).DayOfWeek));
+            var dayCalc = DateTime.Now.AddDays(days).DayOfWeek.ToString();
+            var tempCalc = temp.Select(x => double.Parse(x.Data)).Sum() / temp.Count();
+            return new DaysAndTemp {
+              Day = GetDanishDayName(dayCalc),
+              Temp = tempCalc,
+            };
+        }
+        private string GetDanishDayName(string day)
+        {
+            switch (day)
+            {
+                case "Monday":
+                    return "Mandag";
+                case "Tuesday":
+                    return "Tirsdag";
+                case "Wednesday":
+                    return "Onsdag";
+                case "Thursday":
+                    return "Torsdag";
+                case "Friday":
+                    return "Fredag";
+                case "Saturday":
+                    return "Lørdag";
+                case "Sunday":
+                    return "Søndag";
+                default:
+                    return "Helligdag";
+            }
+        }
+
+    }
+
+    public class DaysAndTemp
+    {
+        public string Day { get; set; }
+        public double Temp { get; set; }
     }
 }

@@ -25,6 +25,9 @@ namespace WCFServiceWebRole1
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Temperatur/GetUdpServerData/")]
         string GetUdpServerData();
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Temperatur/GetNextFiveDays/")]
+        List<DaysAndTemp> GetNextFiveDays();
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
