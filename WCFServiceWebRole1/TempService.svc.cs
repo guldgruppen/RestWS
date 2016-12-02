@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace WCFServiceWebRole1
 {
-    
+
     /// <summary>
     /// Status nummer: 
     /// 0: Ikke filtret 
@@ -27,7 +27,7 @@ namespace WCFServiceWebRole1
         {
             _udpHandler = UdpServerHandler.Instance;
         }
-       
+
 
         public List<Temperatur> GetAll()
         {
@@ -38,14 +38,14 @@ namespace WCFServiceWebRole1
         {
             return db.Temperatur.ToList();
         }
-        public string GetUdpServerData() 
-        {           
+        public string GetUdpServerData()
+        {
             return _udpHandler.GetDataFromUdp();
         }
 
         public Temperatur GetTemp(string locationId)
         {
-            return db.Temperatur.ToList().FirstOrDefault(x => x.Location.Equals(int.Parse(locationId))); 
+            return db.Temperatur.ToList().FirstOrDefault(x => x.Location.Equals(int.Parse(locationId)));
         }
 
         public List<DaysAndTemp> GetNextFiveDays()
@@ -62,19 +62,54 @@ namespace WCFServiceWebRole1
         public void Post(string jsonData)
         {
             Temperatur temp = JsonConvert.DeserializeObject<Temperatur>(jsonData);
-            SetStatus(temp); 
+            SetStatus(temp);
             db.Temperatur.Add(temp);
             db.SaveChanges();
         }
 
+        public double GetStatistiktilfra(string fra, string til, string lokale)
+        {
+            DateTime fromDate = DateTime.Parse(fra);
+            DateTime toDate = DateTime.Parse(til);
+            DateTime newToDate = toDate.AddDays(1);
+            int lokaleid = int.Parse(lokale);
+
+            var room = from t in db.Temperatur
+                       where t.Location.Equals(lokaleid) && (t.Timestamp >= fromDate && t.Timestamp <= newToDate)
+                       select t;
+
+            double statistik = 0;
+
+            foreach (var temperatur in room)
+            {
+                statistik += double.Parse(temperatur.Data);
+            }
+
+            statistik = statistik / room.Count();
+
+            return statistik;
+        }
+
+        public double GetStatistikNow(string lokaleid, string date)
+        {
+            DateTime dateNow = DateTime.Parse(date).Date;
+
+            return db.Temperatur.ToList()
+                .Where((temperatur => temperatur.Timestamp.Date == dateNow))
+                .Where((temperatur => temperatur.Location == int.Parse(lokaleid)))
+                .Average((temperatur => double.Parse(temperatur.Data)));
+           
+        }
+
+
         private void SetStatus(Temperatur t)
         {
             if (double.Parse(t.Data) < 15)
-                t.Status = 1; 
+                t.Status = 1;
             else if (double.Parse(t.Data) >= 15 && double.Parse(t.Data) < 18)
-                t.Status = 2; 
+                t.Status = 2;
             else if (double.Parse(t.Data) >= 18 && double.Parse(t.Data) <= 22)
-                t.Status = 3; 
+                t.Status = 3;
             else if (double.Parse(t.Data) > 22 && double.Parse(t.Data) < 25)
                 t.Status = 4;
             else
@@ -86,9 +121,10 @@ namespace WCFServiceWebRole1
             var temp = db.Temperatur.ToList().Where(x => (x.Timestamp.DayOfWeek).Equals(DateTime.Now.AddDays(days).DayOfWeek));
             var dayCalc = DateTime.Now.AddDays(days).DayOfWeek.ToString();
             var tempCalc = temp.Select(x => double.Parse(x.Data)).Sum() / temp.Count();
-            return new DaysAndTemp {
-              Day = GetDanishDayName(dayCalc) ?? "Hellidag",
-              Temp = tempCalc == 0 ? -1 : tempCalc,
+            return new DaysAndTemp
+            {
+                Day = GetDanishDayName(dayCalc) ?? "Hellidag",
+                Temp = tempCalc == 0 ? -1 : tempCalc,
             };
         }
         private string GetDanishDayName(string day)
